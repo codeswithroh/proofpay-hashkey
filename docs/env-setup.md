@@ -11,6 +11,15 @@ These values are public defaults and are already filled in `.env`:
 - `HSP_CHAIN=hashkey-testnet`
 - `HSP_STABLECOIN_HASHKEY_TESTNET=0x8FE3cB719Ee4410E236Cd6b72ab1fCDC06eF53c6:USDC:6`
 - `HSP_STABLECOIN_HASHKEY=0x054ed45810DbBAb8B27668922D110669c9D88D0a:USDC.e:6`
+- `HASHKEY_SAFE_ADDRESS=0x685c3f57899d14972aFf79038507FaFBfE481703`
+- `HASHKEY_PULL_CONTRACT=0x443A0f4Da5d2fdC47de3eeD45Af41d399F0E5702`
+- `HASHKEY_STORAGE_CONTRACT=0x6Cd59830AAD978446e6cc7f6cc173aF7656Fb917`
+- `HASHKEY_VERIFIER_PROXY_ADDRESS=0xE02A72Be64DA496797821f1c4BB500851C286C6c`
+- HashKey testnet Chainlink feed addresses for BTC/USD, USDT/USD, and USDC/USD.
+
+The local `.env` also contains your demo private key for scripts. It is gitignored and must not be committed.
+
+See [HashKey testnet pins](hashkey-testnet.md) for the configured network, Safe, contract, verifier, and oracle addresses.
 
 ## Needed From You
 
@@ -46,4 +55,3 @@ After setting `HSP_ISSUER_URL`, fetch the issuer address:
 ```bash
 curl "$HSP_ISSUER_URL/issuer"
 ```
-

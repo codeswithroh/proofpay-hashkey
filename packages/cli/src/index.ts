@@ -142,6 +142,50 @@ program
         scope: "hsp"
       },
       {
+        name: "HSP_PRIVATE_KEY",
+        ok: isSet("HSP_PRIVATE_KEY"),
+        warning: true,
+        detail: isSet("HSP_PRIVATE_KEY")
+          ? "configured locally"
+          : "required only for SDK payment scripts",
+        scope: "wallet"
+      },
+      {
+        name: "HASHKEY_SAFE_ADDRESS",
+        ok: isSet("HASHKEY_SAFE_ADDRESS"),
+        warning: false,
+        detail: process.env.HASHKEY_SAFE_ADDRESS ?? "missing",
+        scope: "hashkey"
+      },
+      {
+        name: "HASHKEY_PULL_CONTRACT",
+        ok: isSet("HASHKEY_PULL_CONTRACT"),
+        warning: false,
+        detail: process.env.HASHKEY_PULL_CONTRACT ?? "missing",
+        scope: "hashkey"
+      },
+      {
+        name: "HASHKEY_STORAGE_CONTRACT",
+        ok: isSet("HASHKEY_STORAGE_CONTRACT"),
+        warning: false,
+        detail: process.env.HASHKEY_STORAGE_CONTRACT ?? "missing",
+        scope: "hashkey"
+      },
+      {
+        name: "HASHKEY_VERIFIER_PROXY_ADDRESS",
+        ok: isSet("HASHKEY_VERIFIER_PROXY_ADDRESS"),
+        warning: false,
+        detail: process.env.HASHKEY_VERIFIER_PROXY_ADDRESS ?? "missing",
+        scope: "hashkey"
+      },
+      {
+        name: "HASHKEY_CHAINLINK_USDC_USD_FEED",
+        ok: isSet("HASHKEY_CHAINLINK_USDC_USD_FEED"),
+        warning: false,
+        detail: process.env.HASHKEY_CHAINLINK_USDC_USD_FEED ?? "missing",
+        scope: "oracle"
+      },
+      {
         name: "HASHKEY_KYC_SBT_ADDRESS",
         ok: isSet("HASHKEY_KYC_SBT_ADDRESS"),
         warning: true,
