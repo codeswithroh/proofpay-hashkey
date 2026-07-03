@@ -10,13 +10,13 @@
 
 ## Phase 1: Core SDK
 
-- `PaymentPolicy` schema.
-- `SettlementEvidence` schema.
-- `VerificationDecision` model.
-- Capability subset checks.
-- KYC level/status checks.
-- HashKey `KycSBT` viem provider.
-- HSP receipt/attestation decoder boundary.
+- [x] `PaymentPolicy` schema.
+- [x] `SettlementEvidence` schema.
+- [x] `VerificationDecision` model.
+- [x] Capability subset checks.
+- [x] KYC level/status checks.
+- [x] HashKey `KycSBT` viem provider.
+- [x] HSP receipt/attestation decoder boundary.
 
 ## Phase 2: HSP Integration
 
@@ -31,10 +31,10 @@
 
 ## Phase 3: Paid API Middleware
 
-- HTTP `402` requirement response builder.
-- Header decoder for mandate hash, receipt, and attestations.
+- [x] HTTP `402` requirement response builder.
+- [x] Header decoder for receipt and attestations.
 - Express/Fastify/fetch-compatible helpers.
-- Example protected endpoint.
+- [x] Example protected endpoint.
 
 ## Phase 4: CLI
 
@@ -64,4 +64,3 @@ Keep packages private until the HSP API surface is stable enough for external us
 - ProofPay verifies receipt + KYC + compliance capabilities.
 - API returns protected result.
 - Second run shows rejection when KYC is revoked, insufficient, or missing sanctions attestation.
-

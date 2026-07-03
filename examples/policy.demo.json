@@ -1,0 +1,16 @@
+{
+  "id": "paid-alpha-demo",
+  "chainId": 133,
+  "recipient": "0x2222222222222222222222222222222222222222",
+  "token": "0x3333333333333333333333333333333333333333",
+  "amount": "1000000",
+  "minKycLevel": "ADVANCED",
+  "requiredKycStatus": "APPROVED",
+  "requiredCapabilities": [
+    "proves:hashkey-settlement:v1",
+    "attests:kyc:v1",
+    "attests:sanctions:v1"
+  ],
+  "deadline": "2026-07-14T23:59:59.000Z"
+}
+
