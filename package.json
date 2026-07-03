@@ -1,0 +1,21 @@
+{
+  "name": "proofpay-hashkey",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Verifiable compliant settlement primitives for HashKey Chain, HSP, x402, and AI agents.",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @proofpay/core && npm run build -w @proofpay/http-middleware && npm run build -w @proofpay/cli",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck -w @proofpay/core && npm run typecheck -w @proofpay/http-middleware && npm run typecheck -w @proofpay/cli",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
