@@ -24,9 +24,13 @@ The project is intentionally package-first: no UI is required for the hackathon 
 npm install
 npm run build
 npm test
-npm exec proofpay demo
-npm exec proofpay verify-hsp examples/policy.demo.json examples/hsp-evidence.demo.json
+node packages/cli/dist/index.js doctor
+node packages/cli/dist/index.js demo
+node packages/cli/dist/index.js verify-hsp examples/policy.demo.json examples/hsp-evidence.demo.json
+node packages/cli/dist/index.js evidence encode examples/hsp-evidence.demo.json
 ```
+
+See [CLI docs](docs/cli.md) for the full command surface.
 
 ## Current Hackathon Thesis
 
