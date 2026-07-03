@@ -2,6 +2,7 @@
 import http from "node:http";
 import { Command, Option } from "commander";
 import kleur from "kleur";
+import { config as loadDotEnv } from "dotenv";
 import { createHashKeyKycProviderFromEnv } from "@proofpay/hashkey";
 import { buildPaymentRequired } from "@proofpay/http-middleware";
 import {
@@ -27,6 +28,8 @@ import {
   parseEvidence,
   parsePolicy
 } from "./lib/proofpay.js";
+
+loadDotEnv({ quiet: true });
 
 interface RootOptions {
   json?: boolean;
@@ -99,31 +102,88 @@ program
   .description("check local ProofPay setup")
   .option("--strict", "exit non-zero for warnings")
   .action((options: { strict?: boolean }, command: Command) => {
+    const isSet = (name: string): boolean => {
+      const value = process.env[name];
+      return !!value && !value.includes("TODO_") && value !== "0x0000000000000000000000000000000000000000";
+    };
     const checks = [
       {
         name: "node",
         ok: Number(process.versions.node.split(".")[0]) >= 20,
-        detail: `v${process.versions.node}`
+        detail: `v${process.versions.node}`,
+        scope: "local"
+      },
+      {
+        name: "HASHKEY_CHAIN",
+        ok: process.env.HASHKEY_CHAIN === "testnet" || process.env.HASHKEY_CHAIN === "mainnet",
+        warning: false,
+        detail: process.env.HASHKEY_CHAIN ?? "missing",
+        scope: "live"
+      },
+      {
+        name: "HASHKEY_RPC_URL",
+        ok: isSet("HASHKEY_RPC_URL"),
+        warning: false,
+        detail: process.env.HASHKEY_RPC_URL ?? "missing",
+        scope: "live"
+      },
+      {
+        name: "HSP_CHAIN",
+        ok: isSet("HSP_CHAIN"),
+        warning: false,
+        detail: process.env.HSP_CHAIN ?? "missing",
+        scope: "hsp"
+      },
+      {
+        name: "HSP_STABLECOIN_HASHKEY_TESTNET",
+        ok: isSet("HSP_STABLECOIN_HASHKEY_TESTNET"),
+        warning: false,
+        detail: process.env.HSP_STABLECOIN_HASHKEY_TESTNET ?? "missing",
+        scope: "hsp"
       },
       {
         name: "HASHKEY_KYC_SBT_ADDRESS",
-        ok:
-          !!process.env.HASHKEY_KYC_SBT_ADDRESS &&
-          process.env.HASHKEY_KYC_SBT_ADDRESS !== "0x0000000000000000000000000000000000000000",
+        ok: isSet("HASHKEY_KYC_SBT_ADDRESS"),
         warning: true,
-        detail: process.env.HASHKEY_KYC_SBT_ADDRESS ? "configured" : "missing"
+        detail: isSet("HASHKEY_KYC_SBT_ADDRESS")
+          ? "configured"
+          : "required for live `proofpay kyc` reads",
+        scope: "live-kyc"
       },
       {
         name: "HSP_COORDINATOR_URL",
-        ok: !!process.env.HSP_COORDINATOR_URL,
+        ok: isSet("HSP_COORDINATOR_URL"),
         warning: true,
-        detail: process.env.HSP_COORDINATOR_URL ? "configured" : "missing"
+        detail: isSet("HSP_COORDINATOR_URL")
+          ? "configured"
+          : "required from the HSP deployment for live prepare/submit",
+        scope: "live-hsp"
       },
       {
         name: "HSP_API_KEY",
-        ok: !!process.env.HSP_API_KEY,
+        ok: isSet("HSP_API_KEY"),
         warning: true,
-        detail: process.env.HSP_API_KEY ? "configured" : "missing"
+        detail: isSet("HSP_API_KEY") ? "configured" : "required team write key from HSP deployment",
+        scope: "live-hsp"
+      },
+      {
+        name: "HSP_PINNED_ADAPTER_ADDRESS",
+        ok: isSet("HSP_PINNED_ADAPTER_ADDRESS"),
+        warning: true,
+        detail: isSet("HSP_PINNED_ADAPTER_ADDRESS")
+          ? "configured"
+          : "required trust root from Coordinator GET /chains",
+        scope: "verify"
+      },
+      {
+        name: "HSP_COMPLIANCE_ISSUER",
+        ok: isSet("HSP_COMPLIANCE_ISSUER") || (isSet("HSP_KYC_ISSUER") && isSet("HSP_SANCTIONS_ISSUER")),
+        warning: true,
+        detail:
+          isSet("HSP_COMPLIANCE_ISSUER") || (isSet("HSP_KYC_ISSUER") && isSet("HSP_SANCTIONS_ISSUER"))
+            ? "configured"
+            : "required trust root(s) from mock issuer GET /issuer",
+        scope: "verify"
       }
     ];
     const failed = checks.filter((check) => !check.ok && !check.warning);
@@ -133,7 +193,15 @@ program
       console.log(kleur.bold("ProofPay doctor"));
       for (const check of checks) {
         const kind = check.ok ? "ok" : check.warning ? "warn" : "fail";
-        console.log(`${symbol(kind)} ${check.name} ${kleur.dim(check.detail)}`);
+        console.log(`${symbol(kind)} ${check.name} ${kleur.dim(`[${check.scope}] ${check.detail}`)}`);
+      }
+      if (warnings.length > 0) {
+        console.log("");
+        console.log(kleur.bold("Required from you / hackathon deployment"));
+        console.log("1. HSP_COORDINATOR_URL and HSP_API_KEY from the HSP hackathon deployment.");
+        console.log("2. HSP_PINNED_ADAPTER_ADDRESS from Coordinator GET /chains.");
+        console.log("3. HSP_COMPLIANCE_ISSUER or HSP_KYC_ISSUER + HSP_SANCTIONS_ISSUER from issuer GET /issuer.");
+        console.log("4. HASHKEY_KYC_SBT_ADDRESS from HashKey if we use live KYC SBT reads.");
       }
     });
 

@@ -31,6 +31,7 @@ node packages/cli/dist/index.js evidence encode examples/hsp-evidence.demo.json
 ```
 
 See [CLI docs](docs/cli.md) for the full command surface.
+See [environment setup](docs/env-setup.md) for required HSP/HashKey keys.
 
 ## Current Hackathon Thesis
 
