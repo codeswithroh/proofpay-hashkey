@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run build -w @proofpay/core && npm run build -w @proofpay/http-middleware && npm run build -w @proofpay/cli",
     "test": "npm run test --workspaces --if-present",
-    "typecheck": "npm run typecheck -w @proofpay/core && npm run typecheck -w @proofpay/http-middleware && npm run typecheck -w @proofpay/cli",
+    "typecheck": "npm run build -w @proofpay/core && npm run typecheck -w @proofpay/core && npm run typecheck -w @proofpay/http-middleware && npm run typecheck -w @proofpay/cli",
     "lint": "npm run lint --workspaces --if-present"
   },
   "devDependencies": {
